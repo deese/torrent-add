@@ -57,7 +57,7 @@ VERBOSE = args.verbose
 if args.config:
     #print("Starting in config mode...")
     # Add your configuration mode logic here
-    for i in [ "hostname", "username", "password" ]:
+    for i in [ "hostname", "username", "password", "rutorrent_path"]:
         if i == "password":
             keyring.set_password("torrent_add", i, getpass.getpass(f"Enter {i}: "))
         else:
@@ -66,6 +66,7 @@ if args.config:
 
 if args.set_path:
     keyring.set_password("torrent_add", "rutorrent_path", args.set_path)
+    sys.exit(0)
 
 rutorrent_basepath = keyring.get_password("torrent_add", "rutorrent_path")
 if not rutorrent_basepath:
