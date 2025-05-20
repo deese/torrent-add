@@ -48,7 +48,8 @@ parser = argparse.ArgumentParser(description='Add torrents to rTorrent.')
 parser.add_argument('--config', action='store_true', help='Start in config mode')
 parser.add_argument('--verbose', action='store_true', help='Enable verbose output')
 parser.add_argument ('--set-rutorrent-path', dest="set_path", type=str, help='Set ruTorrent base path', default=None)
-parser.add_argument('torrent_file', type=str, help='Path to the torrent file')
+# Make 'torrent_file' optional by setting nargs='?' and default=None
+parser.add_argument('torrent_file', type=str, nargs='?', default=None, help='Path to the torrent file')
 
 args = parser.parse_args()
 VERBOSE = args.verbose
@@ -72,6 +73,11 @@ if not rutorrent_basepath:
 
 if not all([keyring.get_password("torrent_add", i) for i in [ "hostname", "username", "password"]]):
     msgbox( "Error", "Error: Configuration not found. Run with --config to set up. Config doesn't work with the compiled version.")
+    sys.exit(1)
+
+
+if not args.torrent_file:
+    msgbox("Error", "Error: No torrent file provided.")
     sys.exit(1)
 
 RT = rTorrent(
